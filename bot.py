@@ -16,10 +16,11 @@ BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
-# Создаем клавиатуру
+# Creating Keyboard for the labels
 main_keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
 main_keyboard.add(types.KeyboardButton("Start Translate"))
 
+#choosing the languages keyboard
 languages_keyboard = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
 languages = [
     "English 🇺🇸", "Russian 🇷🇺", "Polish 🇵🇱",
@@ -34,7 +35,7 @@ languages = [
 ]
 languages_keyboard.add(*[types.KeyboardButton(language) for language in languages])
 
-# Переменные для хранения выбранного языка и текста для перевода
+# Variables for storing the selected language and text for translation
 selected_communication_language = ""
 selected_translation_language = ""
 text_to_translate = ""
@@ -52,12 +53,12 @@ def select_translation_language(message, language_code, language_name):
     selected_translation_language = language_code
     send_message(message, f"Okay, now please send me the voice which you want to translate. Voice will be translated to this language: {selected_translation_language}.", reply_markup=languages_keyboard)
 
-# Обработчики для команд /start и /hello
+# Handlers for the /start and /hello commands
 @bot.message_handler(commands=['start', 'hello'])
 def send_welcome(message):
     send_message(message, "Choose an option:", reply_markup=main_keyboard)
 
-# Обработчики для кнопки Start Translate
+# Handller for Start Translate button
 @bot.message_handler(func=lambda message: message.text == "Start Translate")
 def start_translate(message):
     global selected_communication_language, selected_translation_language
@@ -65,7 +66,7 @@ def start_translate(message):
     selected_translation_language = ""
     send_message(message, "Select the language in which you want to communicate:", reply_markup=languages_keyboard)
 
-# Обработчики для кнопок с выбором языка общения
+# Handlaers for the choosing cominication labguage
 @bot.message_handler(func=lambda message: message.text in languages)
 def select_language_handler(message):
     global selected_communication_language, selected_translation_language, text_to_translate
@@ -114,7 +115,7 @@ def select_language_handler(message):
         elif not selected_translation_language:
             select_translation_language(message, language_code, language_name)
 
-# Обработчик для голосовых сообщений
+# Handler for voice mesages
 @bot.message_handler(content_types=['voice'])
 def handle_voice(message):
     global text_to_translate
@@ -127,7 +128,7 @@ def handle_voice(message):
     voice_file_info = bot.get_file(voice_file_id)
     voice_file = bot.download_file(voice_file_info.file_path)
 
-    # Конвертация OGG в WAV
+    # Convert from OGG to WAV (*Default Telegram file format is OGG)
     audio_segment = AudioSegment.from_file(io.BytesIO(voice_file), format="ogg")
     wav_data = io.BytesIO()
     audio_segment.export(wav_data, format="wav")
@@ -135,7 +136,7 @@ def handle_voice(message):
 
     recognizer = sr.Recognizer()
 
-    # Создаем временный файл для сохранения голосового сообщения
+    # Creating temporary file for saving voice message
     with NamedTemporaryFile(delete=False, suffix=".wav") as temp_file:
         temp_file.write(wav_data.read())
 
@@ -143,11 +144,11 @@ def handle_voice(message):
         audio_data = recognizer.record(audio_file)
 
         try:
-            # Распознаем речь
+            # Recognizing the speech
             text_to_translate = recognizer.recognize_google(audio_data, language=selected_communication_language)
             bot.reply_to(message, f"Recognized text: {text_to_translate}")
 
-            # Переводим текст
+            # Translating the text
             translator = Translator()
             translated_text = translator.translate(text_to_translate, dest=selected_translation_language).text
             bot.reply_to(message, f"Translated text: {translated_text}")
@@ -157,11 +158,11 @@ def handle_voice(message):
         except sr.RequestError as e:
             bot.reply_to(message, f"Error during recognition: {e}")
 
-    # Удаляем временный файл
+    # Delete the temp files
     os.remove(temp_file.name)
 
-    # Возвращаем пользователя в главное меню
+    # Get Back to the main menu
     send_welcome(message)
 
-# Запуск бота
+# Run the Bot
 bot.infinity_polling()
