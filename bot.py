@@ -48,10 +48,12 @@ def select_communication_language(message, language_code, language_name):
     selected_communication_language = language_code
     send_message(message, f"Great! Now, select the language to which you want to translate your voice. You have chosen to communicate in {selected_communication_language}.", reply_markup=languages_keyboard)
 
+
 def select_translation_language(message, language_code, language_name):
     global selected_translation_language
     selected_translation_language = language_code
     send_message(message, f"Okay, now please send me the voice which you want to translate. Voice will be translated to this language: {selected_translation_language}.", reply_markup=languages_keyboard)
+  
 
 # Handlers for the /start and /hello commands
 @bot.message_handler(commands=['start', 'hello'])
@@ -116,7 +118,7 @@ def select_language_handler(message):
         elif not selected_translation_language:
             select_translation_language(message, language_code, language_name)
 
-# Handler for voice mesages
+# Handler for voice messages
 @bot.message_handler(content_types=['voice'])
 def handle_voice(message):
     global text_to_translate
@@ -164,6 +166,12 @@ def handle_voice(message):
 
     # Get Back to the main menu
     send_welcome(message)
+
+
+# Обработчик для всех остальных типов сообщений
+@bot.message_handler(content_types=['text', 'photo', 'document', 'video', 'sticker', 'contact', 'location', 'animation', 'video_note'])
+def handle_non_voice(message):
+    bot.reply_to(message, "Please send me required content, follow the instruction.")
 
 # Run the Bot
 bot.infinity_polling()

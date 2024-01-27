@@ -41,7 +41,7 @@ To set up the project, follow these steps:
     3) You will see this path: D:\Microsoft VS Code\bin
     4) Click to edit this path => and after \bin put path to your ffmpeg folder : ;C:\Program Files\ffmpeg-2024-01-01-git-e1c1dc8347-full_build\bin
     5) Final path must be like that: D:\Microsoft VS Code\bin;C:\Program Files\ffmpeg-2024-01-01-git-e1c1dc8347-full_build\bin
-    6) Restart PC and open the project via Visual Studio Code or PayCharm.
+    6) Restart PC and open the project via desired compiler.
 
 
 6. After a successful configuring the support files and open your favorite Compiler, create Virtual Environment and install all requirements for this project.😇
@@ -51,8 +51,6 @@ To set up the project, follow these steps:
     2) Create virtual environment folder via this command => "python -m venv venv"
     3) Activate virtual environment via this command => Windows - "source venv/Scripts/Activate" | Linux - "source venv/bin/activate"
     4) Install all required requirements for this project via this command => pip install -r requirements.txt
-    5) Final path must be like that: D:\Microsoft VS Code\bin;C:\Program Files\ffmpeg-2024-01-01-git-e1c1dc8347-full_build\bin
-    6) Restart PC and open the project via Visual Studio Code or PayCharm.
 
 7. After a successful configuring, launch the project 😇
 
