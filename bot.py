@@ -31,7 +31,7 @@ languages = [
     "Hungarian 🇭🇺", "Romanian 🇷🇴", "Bulgarian 🇧🇬",
     "Chinese 🇨🇳", "Japanese 🇯🇵", "Korean 🇰🇷",
     "Arabic 🇸🇦", "Turkish 🇹🇷", "Hindi 🇮🇳",
-    "Ukrainian 🇺🇦"
+    "Ukrainian 🇺🇦", "Back"
 ]
 languages_keyboard.add(*[types.KeyboardButton(language) for language in languages])
 
@@ -96,7 +96,8 @@ def select_language_handler(message):
         "Arabic 🇸🇦": "ar",
         "Turkish 🇹🇷": "tr",
         "Hindi 🇮🇳": "hi",
-        "Ukrainian 🇺🇦": "uk"
+        "Ukrainian 🇺🇦": "uk",
+        "Back" : "Back"
     }
     language_name = message.text
 
