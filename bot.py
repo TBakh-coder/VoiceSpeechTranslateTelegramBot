@@ -168,7 +168,7 @@ def handle_voice(message):
     send_welcome(message)
 
 
-# Обработчик для всех остальных типов сообщений
+# required content handler
 @bot.message_handler(content_types=['text', 'photo', 'document', 'video', 'sticker', 'contact', 'location', 'animation', 'video_note'])
 def handle_non_voice(message):
     bot.reply_to(message, "Please send me required content, follow the instruction.")
